@@ -100,6 +100,7 @@ subjects:
 EOF
 ```
 
+criar um token para o acesso ao dashboard:
 ```bash
 kubectl -n kubernetes-dashboard create token admin-user
 ```
@@ -130,7 +131,7 @@ verificar os pods criados:
 kubectl get pods -l app=nginx-dashboard -o wide
 ```
 
-### 7. Instalação do Prometheus e Grafana
+### 8. Instalação do Prometheus e Grafana
 
 ```bash
 chmod +x prometheus-install.sh
