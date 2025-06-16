@@ -2,6 +2,13 @@
 
 Este projeto demonstra a criação de um cluster Kubernetes local utilizando o KIND, além da instalação de ferramentas visuais como o Kubernetes Dashboard, Prometheus e Lens para visualização da orquestração de containers.
 
+
+## 📊 O que é um cluster Kubernetes?
+
+Um conjunto de máquinas que executa o Kubernetes, com um control plane e nós de trabalho (workers). Ele orquestra e gerencia containers automaticamente.
+
+
+
 ## 🔧 Tecnologias utilizadas
 
 * Kubernetes
@@ -90,9 +97,6 @@ chmod +x prometheus-install.sh
 ./prometheus-install.sh
 ```
 
-## 📊 O que é um cluster Kubernetes?
-
-Um conjunto de máquinas que executa o Kubernetes, com um control plane e nós de trabalho (workers). Ele orquestra e gerencia containers automaticamente.
 
 ## 📎 Créditos
 
