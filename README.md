@@ -1,6 +1,6 @@
 # Orquestração de Containers com Kubernetes usando KIND, Lens e Kubernetes Dashboard
 
-Este projeto demonstra a criação de um cluster Kubernetes local utilizando o KIND, além da instalação de ferramentas visuais como o Kubernetes Dashboard, Prometheus e Lens para visualização da orquestração de containers.
+Este projeto demonstra a criação de um cluster Kubernetes local utilizando o KIND, além da instalação de ferramentas visuais como o Kubernetes Dashboard e Lens para visualização da orquestração de containers e métricas de cada serviço.
 
 
 ## 🎯 Objetivo do Kubernetes
