@@ -54,6 +54,7 @@ sudo apt update && sudo apt install -y docker.io kubectl git curl
 
 # Instalar KIND
 sudo apt install curl
+snap install kubectl --classic
 curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64"
 sudo mv ./kind /usr/local/bin/kind
 chmod +x /usr/local/bin/kind
