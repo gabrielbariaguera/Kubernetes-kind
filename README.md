@@ -66,7 +66,7 @@ kind create cluster --name meu-cluster --config kind-cluster.yaml
 
 ### 3. Acesso com Lens (opcional)
 
-Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 7).
+Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 8).
 
 ### 4. Instalação do Kubernetes Dashboard
 
@@ -131,7 +131,19 @@ verificar os pods criados:
 kubectl get pods -l app=nginx-dashboard -o wide
 ```
 
-### 8. Instalação do Prometheus e Grafana
+### 8. Exemplos de Orquestração do Kubernetes:
+
+Escalabilidade: criando réplicas dos Pods já existentes
+```bash
+kubectl scale deployment nginx-dashboard --replicas=5
+
+Utilize para ver atualizações em tempo real:
+
+watch -n 1 kubectl get pods
+```
+
+
+### 9. Instalação do Prometheus e Grafana (opcional)
 
 ```bash
 chmod +x prometheus-install.sh
