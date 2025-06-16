@@ -51,31 +51,31 @@ sudo systemctl enable docker
 
 ## 🚀 Passo a passo
 
-### 1. Clone o repositório
+## 1. Clone o repositório
 
 ```bash
 git clone https://github.com/gabrielbariaguera/Kubernetes-kind.git
 cd kubernetes-orquestracao
 ```
 
-### 2. Criação do cluster com KIND
+## 2. Criação do cluster com KIND
 
 ```bash
 kind create cluster --name meu-cluster --config kind-cluster.yaml
 ```
 
-### 3. Acesso com Lens (opcional)
+## 3. Acesso com Lens (opcional)
 
 Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 8).
 
-### 4. Instalação do Kubernetes Dashboard
+## 4. Instalação do Kubernetes Dashboard
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 kubectl apply -f dashboard-admin.yaml
 ```
 
-### 5. Criação de Usuário e Geração do token
+## 5. Criação de Usuário e Geração do token
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -105,7 +105,7 @@ criar um token para o acesso ao dashboard:
 kubectl -n kubernetes-dashboard create token admin-user
 ```
 
-### 6. Usando o Port-Foward para o acesso ao Dashboard
+## 6. Usando o Port-Foward para o acesso ao Dashboard
 
 ```bash
 kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard 8443:443
@@ -114,7 +114,7 @@ kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard 8443:443
 Acesse: [https://localhost:8443](https://localhost:8443)
 
 
-### 7. Criando um Serviço Nginx Básico para vizualização de Pods (duas cópias idênticas)
+## 7. Criando um Serviço Nginx Básico para vizualização de Pods (duas cópias idênticas)
 
 criar um deployment:
 ```bash
@@ -131,23 +131,61 @@ verificar os pods criados:
 kubectl get pods -l app=nginx-dashboard -o wide
 ```
 
-### 8. Exemplos de Orquestração do Kubernetes:
-#### 8.1 a
+## 8. Exemplos de Orquestração do Kubernetes:
+
+### 8.1 Escalabilidade:
 
 Escalabilidade: criando réplicas dos Pods já existentes
 ```bash
 kubectl scale deployment nginx-dashboard --replicas=5
 ```
-
 Utilize para ver atualizações em tempo real:
 ```bash
 watch -n 1 kubectl get pods
 ```
+#### O Kubernetes permite a escalabilidade em tempo real
 
-<br>
+### 8.2 Exemplo de Auto-Recuperação:
 
+Liste todos os Pods:
+```bash
+kubectl get pods
+```
+Escolha um e, de maneira forçada, remova-o:
+```bash
+kubectl delete pod <POD-ESCOLHIDO> --force
+```
+#### O Kubernetes automaticamente cria um novo Pod para substituir o deletado/com erro
 
-### 9. Instalação do Prometheus e Grafana (opcional)
+### 8.3 Rollback
+
+Verifique o histórico de atualizações:
+```bash
+kubectl rollout history deployment/nginx-dashboard
+```
+
+Volte uma versão anterior, é como dar um "CTRL Z" na sua aplicação!
+```bash
+kubectl rollout undo deployment/nginx-dashboard
+```
+
+Ou até mesmo específique uma versão específica (voltando a versão 1):
+```bash
+kubectl rollout undo deployment/nginx-dashboard --to-revision=1
+```
+#### O Kubernetes consegue fazer essas trocas de versões sem interromper a aplicação!
+
+Atualizando a imagem para uma versão inexistente para simular erros:
+```bash
+kubectl set image deployment/nginx-dashboard nginx=nginx:versao-inexistente
+```
+
+Dê uma olhada nos pods falhando, e então volte para a versão anterior e o Kubernetes consegue recuperá-los automaticamente:
+```bash
+watch kubectl get pods
+```
+
+## 9. Instalação do Prometheus e Grafana (opcional)
 
 ```bash
 chmod +x prometheus-install.sh
