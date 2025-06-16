@@ -132,7 +132,7 @@ kubectl get pods -l app=nginx-dashboard -o wide
 ```
 
 ### 8. Exemplos de Orquestração do Kubernetes:
-## 8.1 a
+#### 8.1 a
 
 Escalabilidade: criando réplicas dos Pods já existentes
 ```bash
