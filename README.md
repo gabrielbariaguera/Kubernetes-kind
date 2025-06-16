@@ -75,20 +75,60 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/a
 kubectl apply -f dashboard-admin.yaml
 ```
 
-### 5. Geração do token
+### 5. Criação de Usuário e Geração do token
 
 ```bash
-kubectl apply -f dashboard-admin.yaml
-kubectl -n kubernetes-dashboard describe secret admin-user-token
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
 ```
-
-### 6. Acesso ao Dashboard
 
 ```bash
-kubectl proxy
+kubectl -n kubernetes-dashboard create token admin-user
 ```
 
-Acesse: [http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https\:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
+### 6. Usando o Port-Foward para o acesso ao Dashboard
+
+```bash
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard 8443:443
+```
+
+Acesse: [https://localhost:8443](https://localhost:8443)
+
+
+### 7. Criando um Serviço Nginx Básico para vizualização de Pods (duas cópias idênticas)
+
+criar um deployment:
+```bash
+kubectl create deployment nginx-dashboard --image=nginx:alpine --replicas=2
+```
+
+expor o deployment como serviço:
+```bash
+kubectl expose deployment nginx-dashboard --port=80 --type=NodePort
+```
+
+verificar os pods criados:
+```bash
+kubectl get pods -l app=nginx-dashboard -o wide
+```
 
 ### 7. Instalação do Prometheus e Grafana
 
