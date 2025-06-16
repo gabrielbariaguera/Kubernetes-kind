@@ -100,7 +100,7 @@ sudo systemctl enable docker
 
 ```markdown
 git clone https://github.com/gabrielbariaguera/Kubernetes-kind.git
-cd kubernetes-orquestracao
+cd Kubernetes-kind
 ```
 
 ## 2. Acesso com Lens - Interface Gráfica (opcional)
