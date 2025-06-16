@@ -110,7 +110,7 @@ chmod +x lens-install.sh
 ```
 ### 2.2 Execute o script:
 ```markdown
-./lens-install.sh
+sudo ./lens-install.sh
 ```
 Após a instalação execute o Lens.
 
