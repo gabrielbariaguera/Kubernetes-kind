@@ -117,7 +117,7 @@ Após a instalação execute o Lens.
 ## 3. Criação do cluster com KIND
 
 ```markdown
-kind create cluster --name meu-cluster --config kind-config.yaml
+sudo kind create cluster --name meu-cluster --config kind-config.yaml
 ```
 Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 8).
 
