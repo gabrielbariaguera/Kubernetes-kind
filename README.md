@@ -187,12 +187,12 @@ Vamos utilizar os arquivos disponibilizados no repositório (index.html, Dockerf
 
 Vamos criar a imagem Docker:
 ```markdown
-docker build -t localhost/meu-site-nginx:latest .
+docker build -t meu-site-nginx .
 ```
 
 Carregue a imagem em um cluster existente:
 ```markdown
-kind load docker-image localhost/meu-site-nginx:latest --name NOME_CLUSTER
+kind load docker-image meu-site-nginx --name NOME_DO_CLUSTER
 ```
 
 Aplique as configurações do deployment:
