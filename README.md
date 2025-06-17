@@ -50,22 +50,27 @@ Um conjunto de máquinas (físicas ou virtuais) que executa o Kubernetes, compos
 ### Ubuntu/Debian
 
 ```markdown
-sudo apt update && sudo apt install -y docker.io kubectl git curl
 
 # Instalar Docker
-sudo apt-get update
-sudo apt-get install ca-certificates curl
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
 sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
 
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt update
+
+sudo usermod -aG docker $USER
+newgrp docker
+
 
 # Instalar KIND
 sudo apt install curl
@@ -82,7 +87,11 @@ sudo systemctl enable docker
 ### Fedora
 
 ```markdown
+# Instalar o Docker
+
 sudo dnf install docker kubectl git -y
+sudo usermod -aG docker $USER
+newgrp docker
 
 # Instalar KIND
 curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64"
@@ -117,7 +126,7 @@ Após a instalação execute o Lens.
 ## 3. Criação do cluster com KIND
 
 ```markdown
-kind create cluster --name meu-cluster --config kind-config.yaml
+kind create cluster --name NOME-CLUSTER --config kind-config.yaml
 ```
 Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 8).
 
@@ -127,32 +136,14 @@ Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas
 sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 ```
 
-## 5. Criação de Usuário e Geração do token
+## 5. Criação de Usuário e Geração do token para acesso ao Dashboard
 
+Crie um usuário administrador utilizando o arquivo de configuração do repositório
 ```markdown
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: admin-user
-  namespace: kubernetes-dashboard
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin-user
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: admin-user
-  namespace: kubernetes-dashboard
-EOF
+kubectl apply -f dashboard-admin.yaml
 ```
 
-criar um token para o acesso ao dashboard:
+Crie um token para o acesso ao dashboard e o copie:
 ```markdown
 kubectl -n kubernetes-dashboard create token admin-user
 ```
@@ -164,6 +155,7 @@ kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard 8443:443
 ```
 
 Acesse: [https://localhost:8443](https://localhost:8443)
+e entre com o token gerado anteriormente
 
 
 ## 7. Criando um Deployment Nginx para Demonstração de Pods (duas cópias idênticas)
@@ -190,9 +182,36 @@ Os Nodes são máquinas virtuais (VMs) que fazem parte do cluster do Kubernetes,
 kubectl describe pod NOME-DO-POD | grep -A 5 "Containers:"
 ```
 
-## 8. Exemplos de Orquestração do Kubernetes:
+## 8. Criando um Deployment de um simples site HTML
+Vamos utilizar os arquivos disponibilizados no repositório (index.html, Dockerfile e k8s-deployment)
 
-### 8.1 Escalabilidade:
+Vamos criar a imagem Docker:
+```markdown
+docker build -t localhost/meu-site-nginx:latest .
+```
+
+Carregue a imagem em um cluster existente:
+```markdown
+kind load docker-image localhost/meu-site-nginx:latest --name NOME_CLUSTER
+```
+
+Aplique as configurações do deployment:
+```markdown
+kubectl apply -f k8s-deployment.yaml
+```
+
+Verifique se o serviço está rodando, caso esteja aplique um redirecionamento de porta:
+```markdown
+kubectl port-forward service/meu-site 8080:80
+```
+
+Agora, acesse no seu navegador:
+
+http://localhost:8080
+
+## 9. Exemplos de Orquestração do Kubernetes:
+
+### 9.1 Escalabilidade:
 
 Escalabilidade: criando réplicas dos Pods já existentes
 ```markdown
@@ -204,19 +223,27 @@ watch -n 1 kubectl get pods
 ```
 #### O Kubernetes permite a escalabilidade em tempo real sem Downtime
 
-### 8.2 Exemplo de Auto-Recuperação:
+### 9.2 Escalabilidade Automática:
+
+O Kubernetes consegue escalonar a aplicação automaticamente com o comando:
+```markdown
+kubectl autoscale deployment meu-site --min=1 --max=5 --cpu-percent=50
+```
+Nesse comando é definido o deployment (meu-site) a ser escalonado, o mínimo de réplicas de pods (1), o máximo de réplicas de pods (5) e quando o escalonamento deve ser feito (50% cpu)
+
+### 9.3 Exemplo de Auto-Recuperação:
 
 Liste todos os Pods:
 ```markdown
 kubectl get pods
 ```
-Escolha um e, de maneira forçada, remova-o:
+Escolha um e, de maneira forçada, remova um deles:
 ```markdown
-kubectl delete pod <POD-ESCOLHIDO> --force
+kubectl delete pod NOME-POD-ESCOLHIDO --force
 ```
 #### O Kubernetes automaticamente cria um novo Pod para substituir o deletado/com erro
 
-### 8.3 Rollback
+### 9.4 Rollback
 
 Verifique o histórico de atualizações:
 ```markdown
