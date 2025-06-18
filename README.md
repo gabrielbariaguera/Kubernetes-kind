@@ -198,6 +198,7 @@ kind load docker-image meu-site-nginx --name NOME_DO_CLUSTER
 Aplique as configurações do deployment:
 ```markdown
 kubectl apply -f k8s-deployment.yaml
+kubectl apply -f site-service.yaml #testar sem
 ```
 
 Verifique se o serviço está rodando, caso esteja aplique um redirecionamento de porta:
