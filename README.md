@@ -133,7 +133,7 @@ Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas
 ## 4. Instalação do Kubernetes Dashboard - Interface Gráfica (obrigatória)
 
 ```markdown
-sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml --validate=false
 ```
 
 ## 5. Criação de Usuário e Geração do token para acesso ao Dashboard
