@@ -187,7 +187,7 @@ Vamos utilizar os arquivos disponibilizados no repositório (index.html, Dockerf
 
 Vamos criar a imagem Docker:
 ```markdown
-docker build -t meu-site-nginx .
+docker build -t localhost/meu-site-nginx:latest .
 ```
 
 Carregue a imagem em um cluster existente:
