@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: localhost/meu-site-nginx:latest
+          image: meu-site-nginx:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 80
