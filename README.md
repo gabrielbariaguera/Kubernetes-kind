@@ -216,7 +216,7 @@ http://localhost:8080
 
 Escalabilidade: criando réplicas dos Pods já existentes
 ```markdown
-kubectl scale deployment nginx-dashboard --replicas=5
+kubectl scale deployment meu-site --replicas=5
 ```
 Utilize para ver atualizações em tempo real:
 ```markdown
@@ -248,23 +248,23 @@ kubectl delete pod NOME-POD-ESCOLHIDO --force
 
 Verifique o histórico de atualizações:
 ```markdown
-kubectl rollout history deployment/nginx-dashboard
+kubectl rollout history deployment/meu-site
 ```
 
 Volte uma versão anterior, é como dar um "CTRL Z" na sua aplicação!
 ```markdown
-kubectl rollout undo deployment/nginx-dashboard
+kubectl rollout undo deployment/meu-site
 ```
 
 Ou até mesmo específique uma versão específica (voltando a versão 1):
 ```markdown
-kubectl rollout undo deployment/nginx-dashboard --to-revision=1
+kubectl rollout undo deployment/meu-site --to-revision=1
 ```
 #### O Kubernetes consegue fazer essas trocas de versões sem interromper a aplicação!
 
 Atualizando a imagem para uma versão inexistente para simular erros:
 ```markdown
-kubectl set image deployment/nginx-dashboard nginx=nginx:versao-inexistente
+kubectl set image deployment/meu-site nginx=nginx:versao-inexistente
 ```
 
 Dê uma olhada nos pods falhando, e então volte para a versão anterior e o Kubernetes consegue recuperá-los automaticamente:
