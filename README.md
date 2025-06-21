@@ -130,10 +130,11 @@ kind create cluster --name NOME-CLUSTER --config kind-config.yaml
 ```
 Abra o Lens e ele detectará o cluster automaticamente (para habilitar métricas vá para o passo 8).
 
-## 4. Instalação do Kubernetes Dashboard - Interface Gráfica (obrigatória)
+## 4. Instalação do Kubernetes Dashboard - Interface Gráfica (obrigatória) e Metrics Server
 
 ```markdown
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml --validate=false
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
 ## 5. Criação de Usuário e Geração do token para acesso ao Dashboard
