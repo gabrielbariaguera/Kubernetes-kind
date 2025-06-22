@@ -2,19 +2,71 @@
 
 Este projeto demonstra a criação de um cluster Kubernetes local utilizando o KIND, além da instalação de ferramentas visuais como o Kubernetes Dashboard e Lens para visualização da orquestração de containers e métricas de cada serviço.
 
+---
+
+## 🌟 Introdução ao Kubernetes
+O que é Kubernetes?
+
+Kubernetes (também conhecido como K8s) é uma plataforma open-source para orquestração de containers que automatiza a implantação, escalonamento e gerenciamento de aplicações em containers. Ele foi originalmente desenvolvido pelo Google e agora é mantido pela Cloud Native Computing Foundation (CNCF).
+<p>O Kubernetes funciona como um sistema operacional para aplicações em containers, sendo responsável por gerenciar onde e como essas aplicações rodam em um cluster (um conjunto de máquinas chamadas de nodes).</p>
+
+---
+
+## 🔹 Nodes
+
+Um node é uma máquina (física ou virtual) que faz parte do cluster Kubernetes. Existem dois tipos:
+
+ 1 - Node de controle (Control Plane): é o cérebro do Kubernetes. Ele decide quando e onde os containers vão rodar, monitora o estado do cluster, e reage a falhas que podem acontecer.
+
+ 2 - Node de trabalho (Worker Node): é onde os containers realmente rodam. Cada node de trabalho possui:
+
+- Kubelet: agente responsável por comunicar o node com o control plane.
+
+- Kube-Proxy: gerencia o tráfego de rede dentro e fora do node.
+
+- Container Runtime (ex: Docker, containerd): roda os containers.
+
+## 🔹 Pods
+
+O Pod é a menor unidade que pode ser implantada no Kubernetes. Ele encapsula um ou mais containers que compartilham:
+
+  - O mesmo endereço IP
+
+  - Espaço de armazenamento
+
+  - Configurações de rede
+
+Mesmo que, na maioria dos casos, cada pod contenha apenas um container, é possível que múltiplos containers rodem juntos dentro do mesmo pod, geralmente quando precisam se comunicar com muita frequência.
+
+## 🔹 Como tudo se conecta?
+
+  - O usuário ou sistema envia uma instrução (ex: criar uma aplicação).
+
+  - O Control Plane processa e planeja onde a aplicação deve rodar.
+
+  - Um Pod é criado em um Worker Node com os containers desejados.
+
+  - O Kubelet no node gerencia o pod e garante que ele esteja sempre funcionando.
+
+  - Se o pod falhar, o Kubernetes reinicia automaticamente.
+
+---
 
 ## 🎯 Objetivo do Kubernetes
-O Kubernetes (K8s) é um **orquestrador de containers** projetado para:
 - **Automatizar** a implantação, escalonamento e gerenciamento de aplicações em containers
-- Garantir **alta disponibilidade** (zero downtime)
+- Garantir **alta disponibilidade** (sem nenhum downtime)
 - Gerenciar **recursos de forma eficiente** (CPU, memória, armazenamento)
 - Facilitar **descoberta de serviços** e balanceamento de carga
-- Permitir **atualizações contínuas** e rollback automático
+- Permitir **atualizações contínuas** e rollbacks
+
 
 Problemas que ele resolve:
 - Containers que falharem são reiniciados automaticamente
 - Escalonamento rápido de aplicações para evitar sobrecarga
 - Atualizações são aplicadas sem causarem o "Downtime"
+
+
+---
 
 
 ## 🔧 Tecnologias utilizadas
@@ -24,28 +76,9 @@ Problemas que ele resolve:
 * Lens
 * Kubernetes Dashboard
 
-
-## 📊 O que é um Cluster Kubernetes?
-Um conjunto de máquinas (físicas ou virtuais) que executa o Kubernetes, composto por:
-- **Control Plane**: "Cérebro" do cluster (toma decisões de orquestração)
-- **Nodes (workers)**: Máquinas que executam os containers
-- **Pods**: Unidade mínima de deploy (é como um pacote de containers)
-
-## 🌐 Arquitetura Básica de um Cluster Kubernetes
-```markdown
-[Control Plane]
-├── API Server
-├── Scheduler
-├── Controller Manager
-├── etcd (armazenamento)
-└── [Worker Nodes]
-├── Kubelet
-├── Kube-Proxy
-└── Pods (seus containers)
-```
+---
 
 ## 📦 Pré-requisitos e Instalação
-
 
 ### Ubuntu/Debian
 
@@ -88,7 +121,6 @@ sudo systemctl enable docker
 
 ```markdown
 # Instalar o Docker
-
 sudo dnf install docker kubectl git -y
 sudo usermod -aG docker $USER
 newgrp docker
@@ -210,6 +242,8 @@ kubectl port-forward service/meu-site 8080:80
 Agora, acesse no seu navegador:
 
 http://localhost:8080
+
+---
 
 ## 9. Exemplos de Orquestração do Kubernetes:
 
