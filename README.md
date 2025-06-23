@@ -267,7 +267,30 @@ kubectl autoscale deployment meu-site --min=1 --max=5 --cpu-percent=50
 ```
 Nesse comando é definido o deployment (meu-site) a ser escalonado, o mínimo de réplicas de pods (1), o máximo de réplicas de pods (5) e quando o escalonamento deve ser feito (50% cpu)
 
-### 9.3 Exemplo de Auto-Recuperação:
+### 9.3 Limitação de Recursos
+
+É possível limitar os recursos utilizados por cada container no Kubernetes
+
+Aplicar limitação de cpu e memória com comando direto:
+```markdown
+kubectl patch deployment meu-site --patch '
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx  # Coloque o nome do seu container
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+'
+```
+Esse comando define os limites (limits) e os recursos garantidos pelo container (requests)
+
+### 9.4 Exemplo de Auto-Recuperação:
 
 Liste todos os Pods:
 ```markdown
@@ -279,7 +302,7 @@ kubectl delete pod NOME-POD-ESCOLHIDO --force
 ```
 #### O Kubernetes automaticamente cria um novo Pod para substituir o deletado/com erro
 
-### 9.4 Rollback
+### 9.5 Rollback
 
 Verifique o histórico de atualizações:
 ```markdown
