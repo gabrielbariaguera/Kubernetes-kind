@@ -290,6 +290,11 @@ spec:
 ```
 Esse comando define os limites (limits) e os recursos garantidos pelo container (requests)
 
+Para ver os limites aplicados use:
+```markdown
+kubectl describe pod NOME_DO_POD | grep -A 5 "Limits"
+```
+
 ### 9.4 Exemplo de Auto-Recuperação:
 
 Liste todos os Pods:
