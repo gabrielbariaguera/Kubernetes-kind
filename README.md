@@ -278,7 +278,7 @@ spec:
   template:
     spec:
       containers:
-      - name: nginx  # Coloque o nome do seu container
+      - name: site  # Coloque o nome do seu container
         resources:
           requests:
             cpu: "100m"
