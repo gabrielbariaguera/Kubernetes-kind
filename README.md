@@ -253,6 +253,9 @@ Escalabilidade: criando réplicas dos Pods já existentes
 ```markdown
 kubectl scale deployment meu-site --replicas=5
 ```
+```markdown
+kubectl get pods -o wide
+```
 Utilize para ver atualizações em tempo real:
 ```markdown
 watch -n 1 kubectl get pods
