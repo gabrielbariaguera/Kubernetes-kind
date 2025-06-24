@@ -271,7 +271,7 @@ Nesse comando é definido o deployment (meu-site) a ser escalonado, o mínimo de
 
 É possível limitar os recursos utilizados por cada container no Kubernetes
 
-Aplicar limitação de cpu e memória com comando direto:
+Aplicar limitação de cpu e memória em mebibytes com comando direto:
 ```markdown
 kubectl patch deployment meu-site --patch '
 spec:
